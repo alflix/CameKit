@@ -69,7 +69,7 @@ extension BaseSession.FlashMode {
             if oldValue == cameraDetection { return }
 
             for output in session.outputs where output is AVCaptureMetadataOutput {
-                 session.removeOutput(output)
+                session.removeOutput(output)
             }
 
             faceDetectionBoxes.forEach({ $0.removeFromSuperview() })
@@ -153,8 +153,8 @@ extension BaseSession.FlashMode {
                 if
                     resolution.width > 0, resolution.height > 0,
                     let format = BaseSession.deviceInputFormat(input: deviceInput,
-                                                              width: Int(resolution.width),
-                                                              height: Int(resolution.height))
+                                                               width: Int(resolution.width),
+                                                               height: Int(resolution.height))
                 {
                     deviceInput.device.activeFormat = format
                 } else {
