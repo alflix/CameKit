@@ -10,5 +10,7 @@ import Foundation
 
 public enum CustomError: Error {
     case captureDeviceNotFound
-    case error(String)
+    case fileDataRepresentationGetFail
+    case dataToImageFail
+    case firstSnapShotExportFail
 }

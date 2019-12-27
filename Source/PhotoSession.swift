@@ -196,7 +196,7 @@ extension PhotoSession: AVCapturePhotoCaptureDelegate {
         }
 
         guard let data = photo.fileDataRepresentation() else {
-            errorCallback(CustomError.error("Cannot get photo file data representation"))
+            errorCallback(CustomError.fileDataRepresentationGetFail)
             return
         }
 
@@ -223,7 +223,7 @@ extension PhotoSession: AVCapturePhotoCaptureDelegate {
             let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer,
                                                                         previewPhotoSampleBuffer: previewPhotoSampleBuffer) else
         {
-            errorCallback(CustomError.error("Cannot get photo file data representation"))
+            errorCallback(CustomError.fileDataRepresentationGetFail)
             return
         }
 
@@ -232,16 +232,17 @@ extension PhotoSession: AVCapturePhotoCaptureDelegate {
 
     private func processPhotoData(data: Data, resolvedSettings: AVCaptureResolvedPhotoSettings) {
         guard let image = UIImage(data: data) else {
-            errorCallback(CustomError.error("Cannot get photo"))
+            errorCallback(CustomError.dataToImageFail)
             return
         }
 
         if
             resolution.width > 0, resolution.height > 0,
-            let transformedImage = Utils.cropAndScale(image, width: Int(resolution.width),
-                                                        height: Int(resolution.height),
-                                                        orientation: UIDevice.current.orientation,
-                                                        mirrored: cameraPosition == .front)
+            let transformedImage = Utils.cropAndScale(image,
+                                                      width: Int(resolution.width),
+                                                      height: Int(resolution.height),
+                                                      orientation: UIDevice.current.orientation,
+                                                      mirrored: cameraPosition == .front)
         {
             captureCallback(transformedImage, resolvedSettings)
             return
