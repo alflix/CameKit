@@ -19,24 +19,20 @@ extension BaseSession.FlashMode {
 }
 
 @objc public class VideoSession: BaseSession {
-    /// 是否允许拍照，允许的话，在拍摄时间小于 0.5 秒的时候，会输出 UIImage (videoCaptureCallback)
-    public var allowTakePhoto: Bool = true
     /// 视频输出
     let movieOutput = AVCaptureMovieFileOutput()
     /// 图片输出
     let photoOutput = AVCapturePhotoOutput()
     /// 视频输出回调
-    var recordCallback: (URL) -> Void = { (_) in }
+    var recordCallback: RecordCallback = { (_, _, _) in }
     /// 错误回调
     var errorCallback: (Error) -> Void = { (_) in }
     /// 图片输出回调
-    public var captureCallback: (UIImage, AVCaptureResolvedPhotoSettings) -> Void = { (_, _) in }
-    /// 拍摄时间小于 0.5 秒的时候，图片输出回调
-    public var videoCaptureCallback: (UIImage, AVCaptureResolvedPhotoSettings) -> Void = { (_, _) in }
+    public var imageCaptureCallback: CaptureCallback = { (_, _) in }
     /// 是否正在录像
     @objc public private(set) var isRecording = false
-    /// 输出图片时，是否正在录像
-    @objc public private(set) var isVideoCapture = false
+    /// 第一帧图片，拍照时为空
+    @objc public private(set) var firstSnapShot: UIImage?
     /// 相机位置
     @objc public var cameraPosition = CameraPosition.back {
         didSet {
@@ -66,7 +62,6 @@ extension BaseSession.FlashMode {
     @objc public override var zoom: Double {
         didSet {
             guard let device = captureDeviceInput?.device else { return }
-
             do {
                 try device.lockForConfiguration()
                 device.videoZoomFactor = CGFloat(zoom)
@@ -112,13 +107,11 @@ extension BaseSession.FlashMode {
 
         session.sessionPreset = .hd1920x1080
         session.addOutput(movieOutput)
-        if allowTakePhoto {
-            session.addOutput(photoOutput)
-        }
+        session.addOutput(photoOutput)
     }
 
     /// 开始录像
-    @objc public func record(url: URL? = nil, _ callback: @escaping (URL) -> Void, error: @escaping (Error) -> Void) {
+    @objc public func record(url: URL? = nil, _ callback: @escaping RecordCallback, error: @escaping (Error) -> Void) {
         if isRecording { return }
 
         recordCallback = callback
@@ -138,10 +131,10 @@ extension BaseSession.FlashMode {
     }
 
     /// 拍照
-    @objc public func capture(_ callback: @escaping (UIImage, AVCaptureResolvedPhotoSettings) -> Void, _ error: @escaping (Error) -> Void) {
-        captureCallback = callback
+    @objc public func capture(_ callback: @escaping CaptureCallback, _ error: @escaping (Error) -> Void) {
+        imageCaptureCallback = callback
         errorCallback = error
-        isVideoCapture = false
+        firstSnapShot = nil
         capture()
     }
 
@@ -189,13 +182,15 @@ extension VideoSession: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL,
                            from connections: [AVCaptureConnection]) {
         isRecording = true
+        // 拍照，用于获取第一帧
+        capture()
     }
 
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL,
                            from connections: [AVCaptureConnection], error: Error?) {
         isRecording = false
         defer {
-            recordCallback = { (_) in }
+            recordCallback = { (_,_,_) in }
             errorCallback = { (_) in }
         }
 
@@ -203,12 +198,12 @@ extension VideoSession: AVCaptureFileOutputRecordingDelegate {
             errorCallback(error)
             return
         }
-        if CMTimeGetSeconds(output.recordedDuration) < 0.5 {
-            isVideoCapture = true
-            capture()
+        guard let firstSnapShot = firstSnapShot else {
+            errorCallback(CustomError.firstSnapShotExportFail)
             return
         }
-        recordCallback(outputFileURL)
+        recordCallback(outputFileURL, Float(CMTimeGetSeconds(output.recordedDuration)), firstSnapShot)
+        self.firstSnapShot = nil
     }
 }
 
@@ -216,7 +211,7 @@ extension VideoSession: AVCapturePhotoCaptureDelegate {
     @available(iOS 11.0, *)
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         defer {
-            captureCallback = { (_, _) in }
+            imageCaptureCallback = { (_, _) in }
             errorCallback = { (_) in }
         }
 
@@ -226,18 +221,26 @@ extension VideoSession: AVCapturePhotoCaptureDelegate {
         }
 
         guard let data = photo.fileDataRepresentation() else {
-            errorCallback(CustomError.error("Cannot get photo file data representation"))
+            errorCallback(CustomError.fileDataRepresentationGetFail)
             return
         }
 
         guard let image = UIImage(data: data) else {
-            errorCallback(CustomError.error("Cannot get photo"))
+            errorCallback(CustomError.dataToImageFail)
             return
         }
-        if isVideoCapture {
-            videoCaptureCallback(image, photo.resolvedSettings)
+
+        guard let transformedImage = Utils.cropAndScale(image,
+                                                        width: Int(image.size.width),
+                                                        height: Int(image.size.height),
+                                                        orientation: UIDevice.current.orientation,
+                                                        mirrored: cameraPosition == .front) else {
+                                                            return
+        }
+        if isRecording {
+            firstSnapShot = transformedImage
         } else {
-            captureCallback(image, photo.resolvedSettings)
+            imageCaptureCallback(transformedImage, photo.resolvedSettings)
         }
     }
 }
