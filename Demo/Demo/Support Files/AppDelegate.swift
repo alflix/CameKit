@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Demo
 //
-//  Created by John on 2019/3/20.
-//  Copyright © 2019 Ganguo. All rights reserved.
+//  Created by John on 2019/12/13.
+//  Copyright © 2019 MessageUI. All rights reserved.
 //
 
 import UIKit
@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        window?.backgroundColor = .white
         return true
     }
 }

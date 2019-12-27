@@ -1,0 +1,61 @@
+PODS:
+  - GGUI (0.9.3)
+  - SnapKit (5.0.1)
+  - SwifterSwift (5.1.0):
+    - SwifterSwift/AppKit (= 5.1.0)
+    - SwifterSwift/CoreGraphics (= 5.1.0)
+    - SwifterSwift/CoreLocation (= 5.1.0)
+    - SwifterSwift/Dispatch (= 5.1.0)
+    - SwifterSwift/Foundation (= 5.1.0)
+    - SwifterSwift/MapKit (= 5.1.0)
+    - SwifterSwift/SceneKit (= 5.1.0)
+    - SwifterSwift/SpriteKit (= 5.1.0)
+    - SwifterSwift/SwiftStdlib (= 5.1.0)
+    - SwifterSwift/UIKit (= 5.1.0)
+  - SwifterSwift/AppKit (5.1.0)
+  - SwifterSwift/CoreGraphics (5.1.0)
+  - SwifterSwift/CoreLocation (5.1.0)
+  - SwifterSwift/Dispatch (5.1.0)
+  - SwifterSwift/Foundation (5.1.0)
+  - SwifterSwift/MapKit (5.1.0)
+  - SwifterSwift/SceneKit (5.1.0)
+  - SwifterSwift/SpriteKit (5.1.0)
+  - SwifterSwift/SwiftStdlib (5.1.0)
+  - SwifterSwift/UIKit (5.1.0)
+  - SwiftLint (0.38.0)
+  - UICircularProgressRing (6.4.0)
+  - ZFPlayer/AVPlayer (3.2.16):
+    - ZFPlayer/Core
+  - ZFPlayer/ControlView (3.2.16):
+    - ZFPlayer/Core
+  - ZFPlayer/Core (3.2.16)
+
+DEPENDENCIES:
+  - GGUI
+  - SnapKit
+  - SwifterSwift
+  - SwiftLint
+  - UICircularProgressRing
+  - ZFPlayer/AVPlayer
+  - ZFPlayer/ControlView
+
+SPEC REPOS:
+  trunk:
+    - GGUI
+    - SnapKit
+    - SwifterSwift
+    - SwiftLint
+    - UICircularProgressRing
+    - ZFPlayer
+
+SPEC CHECKSUMS:
+  GGUI: 40182eaf1c7e6e16f3e86ab8dfe987b2f77cbd9e
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SwifterSwift: a9e8e144832638c2850b43da5feaf9598c6ad65b
+  SwiftLint: 4105f061f9812b214568b736dab580ab2c73a582
+  UICircularProgressRing: 907613633e76e561b972a3868c95517d14c71006
+  ZFPlayer: fbae8477ec9a83f644bd8890e92e7871f37a587d
+
+PODFILE CHECKSUM: b30b07647738b77590bf9d47c7c4ef26aa3a2d01
+
+COCOAPODS: 1.8.4

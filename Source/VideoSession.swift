@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import UIKit
 
 extension BaseSession.FlashMode {
     var captureTorchMode: AVCaptureDevice.TorchMode {

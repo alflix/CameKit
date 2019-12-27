@@ -1,0 +1,26 @@
+platform :ios, '10.0'
+inhibit_all_warnings!
+use_frameworks!
+install! 'cocoapods'
+
+targets = ['Demo']
+
+targets.each do |t|
+  target t do
+    pod 'SwiftLint'
+    pod 'SnapKit'
+    pod 'GGUI'
+    pod 'SwifterSwift'
+    pod 'UICircularProgressRing'
+    pod 'ZFPlayer/AVPlayer'
+    pod 'ZFPlayer/ControlView'
+
+  end
+end
+
+# fix warning
+post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED'] = 'YES'
+  end
+end
