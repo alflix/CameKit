@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GGUI
 
 class PhotoPreviewViewController: UIViewController, UIScrollViewDelegate {
     var doneBlock: (() -> Void)?
@@ -29,7 +28,7 @@ class PhotoPreviewViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.imageView.image = self.image
-        let space = (Size.screenHeight - Size.screenWidth * (192/108))/2.0
+        let space = (UIScreen.main.bounds.height - UIScreen.main.bounds.width * (192/108))/2.0
         topConstraint.constant = space
         bottomConstraint.constant = space
     }

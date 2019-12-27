@@ -14,7 +14,6 @@ targets.each do |t|
     pod 'UICircularProgressRing'
     pod 'ZFPlayer/AVPlayer'
     pod 'ZFPlayer/ControlView'
-
   end
 end
 
