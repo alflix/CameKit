@@ -70,6 +70,9 @@ extension BaseSession.CameraPosition {
     @objc func didChangeValue(session: BaseSession, value: Any, key: String)
 }
 
+public typealias RecordCallback = (_ url: URL, _ recordedDuration: Float, _ thumbImage: UIImage) -> Void
+public typealias CaptureCallback = (UIImage, AVCaptureResolvedPhotoSettings) -> Void
+
 @objc public class BaseSession: NSObject {
     /// 输入设备类型
     @objc public enum DeviceType: UInt {

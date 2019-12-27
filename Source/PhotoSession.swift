@@ -31,7 +31,7 @@ extension BaseSession.FlashMode {
     /// 包含识别出人脸的框的数组
     var faceDetectionBoxes: [UIView] = []
     /// 成功回调
-    var captureCallback: (UIImage, AVCaptureResolvedPhotoSettings) -> Void = { (_, _) in }
+    var captureCallback: CaptureCallback = { (_, _) in }
     /// 错误回调
     var errorCallback: (Error) -> Void = { (_) in }
 
@@ -104,7 +104,7 @@ extension BaseSession.FlashMode {
     }
 
     /// 调用拍照方法
-    @objc public func capture(_ callback: @escaping (UIImage, AVCaptureResolvedPhotoSettings) -> Void, _ error: @escaping (Error) -> Void) {
+    @objc public func capture(_ callback: @escaping CaptureCallback, _ error: @escaping (Error) -> Void) {
         captureCallback = callback
         errorCallback = error
 
