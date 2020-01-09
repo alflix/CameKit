@@ -7,7 +7,6 @@
 //
 
 import AVFoundation
-import UIKit
 
 public extension UIDeviceOrientation {
     /// 处理视频的旋转问题

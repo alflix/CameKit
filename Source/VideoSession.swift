@@ -7,7 +7,6 @@
 //
 
 import AVFoundation
-import UIKit
 
 extension BaseSession.FlashMode {
     var captureTorchMode: AVCaptureDevice.TorchMode {
@@ -191,7 +190,7 @@ extension VideoSession: AVCaptureFileOutputRecordingDelegate {
                            from connections: [AVCaptureConnection], error: Error?) {
         isRecording = false
         defer {
-            recordCallback = { (_,_,_) in }
+            recordCallback = { (_, _, _) in }
             errorCallback = { (_) in }
         }
 
