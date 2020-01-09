@@ -3,10 +3,11 @@ Pod::Spec.new do |s|
 	s.version               = '0.9.0'
 	s.summary               = 'Camera Kit'
 
-	s.homepage              = 'https://www.ganguotech.com/'
-	s.license               = { :type => "Copyright", :text => "Copyright 2019" }
-	s.authors               = { 'John' => 'john@ganguo.hk' }
-	s.source                = { :path => 'Source' }	
+	s.homepage              = 'https://github.com/alflix/CameKit'
+	s.license               = { :type => 'Apache-2.0', :file => 'LICENSE' }
+	
+	s.authors               = { 'John' => 'jieyuanz24@gmail.com' }
+	s.source                = { :git => 'https://github.com/alflix/CameKit.git', :tag => "#{s.version}" }
 	s.ios.framework         = 'UIKit'
 	
 	s.swift_version         = "5.1"
